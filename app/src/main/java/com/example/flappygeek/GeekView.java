@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -11,14 +12,31 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
+
 public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
 
     private Context context;
     private Bitmap PLAYER_BMP = BitmapFactory.decodeResource(getResources(), R.drawable.cartman);
-    public int x = 100;
+
+    private Bitmap Background = BitmapFactory.decodeResource(getResources(), R.drawable.bus);
+
+    int width = Background.getWidth();
+    int height = Background.getHeight();
+    int newWidth = 1080;
+    int newHeight = 1920;
+    float scaleWidth = ((float) newWidth) / width;
+    float scaleHeight = ((float) newHeight) / height;
+
+    Matrix toto = new Matrix();
+
+    toto.
+
+
+    //private Bitmap resizedBitmap = Bitmap.createBitmap(Background, 0, 0, width, height, matrix, false);
+
+    public int x = 0;
     public int y;
     public int velY;
-    public int velX;
     boolean up = false;
 
     MainThread mainThread;
@@ -39,7 +57,6 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
         //Game logic here
         if(up){
             velY -=1;
-            
         }
         else{
             velY +=1;
@@ -67,8 +84,13 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
 
     }
     public void render(Canvas canvas){
+
         //Game rendering here
+        canvas.drawBitmap(Background,0 ,0 , null );
+
+
         canvas.drawBitmap(PLAYER_BMP, x, y, null);
+
     }
 
     public GeekView(Context context) {
