@@ -15,9 +15,10 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
 
     private Context context;
     private Bitmap PLAYER_BMP = BitmapFactory.decodeResource(getResources(), R.drawable.cartman);
-    public final int x = 100;
+    public int x = 100;
     public int y;
     public int velY;
+    public int velX;
     boolean up = false;
 
     MainThread mainThread;
@@ -38,6 +39,7 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
         //Game logic here
         if(up){
             velY -=1;
+            
         }
         else{
             velY +=1;
@@ -61,7 +63,7 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
         display.getSize(size);
         WIDTH = size.x;
         HEIGHT = size.y;
-        y = HEIGHT/ 2 - PLAYER_BMP.getHeight();
+        x = WIDTH/ 2 - PLAYER_BMP.getWidth();
 
     }
     public void render(Canvas canvas){
