@@ -17,26 +17,10 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
 
     private Context context;
     private Bitmap PLAYER_BMP = BitmapFactory.decodeResource(getResources(), R.drawable.cartman);
-
-    private Bitmap Background = BitmapFactory.decodeResource(getResources(), R.drawable.bus);
-
-    int width = Background.getWidth();
-    int height = Background.getHeight();
-    int newWidth = 1080;
-    int newHeight = 1920;
-    float scaleWidth = ((float) newWidth) / width;
-    float scaleHeight = ((float) newHeight) / height;
-
-    Matrix toto = new Matrix();
-
-    toto.
-
-
-    //private Bitmap resizedBitmap = Bitmap.createBitmap(Background, 0, 0, width, height, matrix, false);
-
-    public int x = 0;
-    public int y;
-    public int velY;
+    private Bitmap resizedBitmap;
+    public float x = 0;
+    public float y = 0;
+    public float velY;
     boolean up = false;
 
     MainThread mainThread;
@@ -56,14 +40,20 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
     public void tick(){
         //Game logic here
         if(up){
-            velY -=1;
+            velY -=0.1;
         }
         else{
-            velY +=1;
+            velY +=0.1;
         }
         if(velY >14)velY = 14;
         if(velY <-14)velY = -14;
         y += velY *2;
+
+        if(y <= 50){
+            y = 50;
+        }else if(y > 1920){
+            y = 1920;
+        }
     }
 
 
@@ -86,7 +76,8 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
     public void render(Canvas canvas){
 
         //Game rendering here
-        canvas.drawBitmap(Background,0 ,0 , null );
+
+        canvas.drawBitmap(resizedBitmap,0 ,0 , null );
 
 
         canvas.drawBitmap(PLAYER_BMP, x, y, null);
@@ -96,6 +87,21 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
     public GeekView(Context context) {
         super(context);
         mainThread = new MainThread(getHolder(), this);
+
+
+        Bitmap Background = BitmapFactory.decodeResource(getResources(), R.drawable.bus);
+
+        int width = Background.getWidth();
+        int height = Background.getHeight();
+        int newWidth = 2120;
+        int newHeight = 1920;
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+
+        Matrix toto = new Matrix();
+        toto.postScale(scaleWidth, scaleHeight);
+
+        resizedBitmap = Bitmap.createBitmap(Background, 0, 0, width, height, toto, false);
 
     }
 
