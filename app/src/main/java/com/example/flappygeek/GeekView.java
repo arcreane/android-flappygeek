@@ -1,5 +1,6 @@
 package com.example.flappygeek;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,17 +12,20 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
-
+import android.widget.Toast;
 
 public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
 
     private Context context;
     private Bitmap PLAYER_BMP = BitmapFactory.decodeResource(getResources(), R.drawable.cartman);
+    private Bitmap Tubes = BitmapFactory.decodeResource(getResources(), R.drawable.tube);
     private Bitmap resizedBitmap;
+    private Bitmap resizedPlayerBitmap;
     public float x = 0;
     public float y = 0;
     public float velY;
     boolean up = false;
+
 
     MainThread mainThread;
 
@@ -34,25 +38,26 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
         }else if(event.getAction() == MotionEvent.ACTION_UP){
             up = false;
         }
-        return super.onTouchEvent(event);
+        return true;
+        //return super.onTouchEvent(event);
     }
 
     public void tick(){
         //Game logic here
         if(up){
-            velY -=0.1;
+            velY -=1;
         }
         else{
-            velY +=0.1;
+            velY +=1;
         }
         if(velY >14)velY = 14;
         if(velY <-14)velY = -14;
         y += velY *2;
 
-        if(y <= 50){
-            y = 50;
-        }else if(y > 1920){
-            y = 1920;
+        if(y <= 0){
+            y = 1;
+        }else if(y > 1301){
+            y = 1300;
         }
     }
 
@@ -73,14 +78,26 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
         x = WIDTH/ 2 - PLAYER_BMP.getWidth();
 
     }
+    @SuppressLint("WrongConstant")
     public void render(Canvas canvas){
 
         //Game rendering here
 
         canvas.drawBitmap(resizedBitmap,0 ,0 , null );
 
+        canvas.drawBitmap(Tubes,100 ,1300 , null );
 
-        canvas.drawBitmap(PLAYER_BMP, x, y, null);
+        canvas.drawBitmap(resizedPlayerBitmap, x, y, null);
+
+        if(x == 300){
+            System.out.println("tu as perdu");
+        }else if(y == 1300){
+
+            System.out.println("tu as encore perdu");
+            String text = "tu perdu";
+            int duration = 2;
+            Toast.makeText(context, text, duration).show();
+        }
 
     }
 
@@ -88,8 +105,9 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
         super(context);
         mainThread = new MainThread(getHolder(), this);
 
-
         Bitmap Background = BitmapFactory.decodeResource(getResources(), R.drawable.bus);
+
+        Bitmap Character = BitmapFactory.decodeResource(getResources(), R.drawable.cartman);
 
         int width = Background.getWidth();
         int height = Background.getHeight();
@@ -98,11 +116,18 @@ public class GeekView extends SurfaceView implements SurfaceHolder.Callback{
         float scaleWidth = ((float) newWidth) / width;
         float scaleHeight = ((float) newHeight) / height;
 
+        float scalePersoWidth = ((float) newWidth) / width;
+        float scalePersoHeight = ((float) newHeight) / height;
+
+
         Matrix toto = new Matrix();
         toto.postScale(scaleWidth, scaleHeight);
 
         resizedBitmap = Bitmap.createBitmap(Background, 0, 0, width, height, toto, false);
 
+        Matrix perso = new Matrix();
+        perso.postScale(scalePersoWidth, scalePersoHeight);
+        resizedPlayerBitmap  = Bitmap.createBitmap(Character, 100, 200, WIDTH + 300, HEIGHT + 300, perso, false );
     }
 
     @Override

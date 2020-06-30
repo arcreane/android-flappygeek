@@ -20,12 +20,12 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
-        final ImageButton btn = findViewById(R.id.imageButton);
+        //final ImageButton btn = findViewById(R.id.imageButton);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btn.setVisibility(View.GONE);
+        //btn.setOnClickListener(new View.OnClickListener() {
+           // @Override
+            //public void onClick(View v) {
+                //btn.setVisibility(View.GONE);
 
                 RelativeLayout layout = findViewById(R.id.background);
 
@@ -33,14 +33,8 @@ public class MainActivity extends Activity {
 
                 geekView.startGame();
 
-            }
-        });
-
-
-
-
-
-
+            //}
+       // });
     }
 
 
